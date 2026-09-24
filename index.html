@@ -85,7 +85,10 @@
 <div id="secret-vault">
     <div class="vault-header">
         <h2 id="vault-title">Mind Vault</h2>
-        <button onclick="location.reload()" class="action-btn lock-btn">Lock</button>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="changePasscode()" class="action-btn" style="flex: none; padding: 8px 12px;">PIN</button>
+            <button onclick="location.reload()" class="action-btn lock-btn">Lock</button>
+        </div>
     </div>
     <div id="notes-container">
         <textarea id="note-input" placeholder="Enter a new secure thought..." oninput="autoSaveDraft()"></textarea>
@@ -107,8 +110,35 @@
 
     let currentVal = "0", prevVal = "", operator = null, resetDisplay = false;
     let editingId = null;
-    const secretCode = "123456", salt = "mind-garden-vault-v1";
+    const salt = "mind-garden-vault-v1";
     const display = document.getElementById("display");
+
+    let secretCode = localStorage.getItem('mg_secret_code');
+
+    function initPasscode() {
+        while (!secretCode || !secretCode.trim()) {
+            const entered = prompt("Set your secret vault passcode (numeric recommended):");
+            if (entered && entered.trim()) {
+                secretCode = entered.trim();
+                localStorage.setItem('mg_secret_code', secretCode);
+            }
+        }
+    }
+    initPasscode();
+
+    function changePasscode() {
+        const current = prompt("Enter current passcode:");
+        if (current !== secretCode) {
+            alert("Incorrect passcode.");
+            return;
+        }
+        const updated = prompt("Enter new passcode:");
+        if (updated && updated.trim()) {
+            secretCode = updated.trim();
+            localStorage.setItem('mg_secret_code', secretCode);
+            alert("Passcode updated.");
+        }
+    }
 
     const crypt = (t) => btoa(t.split('').map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ salt.charCodeAt(i % salt.length))).join(''));
     const decrypt = (e) => { try { return atob(e).split('').map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ salt.charCodeAt(i % salt.length))).join(''); } catch(ex) { return ""; }};
@@ -200,7 +230,8 @@
                         </div>
                     </div>
                 </div>
-            `}).join('');
+            `;
+        }).join('');
     }
 
     function copyNote(txt) { navigator.clipboard.writeText(txt); alert("Copied"); }
