@@ -107,7 +107,7 @@
 
     let currentVal = "0", prevVal = "", operator = null, resetDisplay = false;
     let editingId = null;
-    const secretCode = "640673", salt = "mind-garden-vault-v1";
+    const secretCode = "123456", salt = "mind-garden-vault-v1";
     const display = document.getElementById("display");
 
     const crypt = (t) => btoa(t.split('').map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ salt.charCodeAt(i % salt.length))).join(''));
