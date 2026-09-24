@@ -22,8 +22,6 @@ The application functions outwardly as a standard arithmetic calculator. Enterin
 
 ## Vault Access Mechanics
 
-* **Default Passcode:** `123456`
-* **Trigger:** Input `123456` on the numeric pad and press `=`.
 * **Lockout:** Pressing the **Lock** button in the header or shaking the physical device forces an immediate session flush (`location.reload()`).
 
 ---
